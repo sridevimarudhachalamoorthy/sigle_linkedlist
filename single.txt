@@ -1,0 +1,362 @@
+#include<stdlib.h>
+#include <stdio.h>
+
+struct node{
+    int data;
+    struct node *next;
+}*head=NULL,*tail=NULL,*temp,*temp1,*head1=NULL,*tail1=NULL,*newnode,*prev,*new;
+
+
+struct node *createnode(int data){
+    new=(struct node*)malloc(sizeof(struct node));
+    new->data=data;
+    new->next=NULL;
+   
+    return new;
+}
+
+
+
+// -----------------------------------insertion at the end--------------------------------------------
+struct node * insertAtEnd(struct node *head,int data){
+    
+    newnode=createnode(data); 
+    
+    if(head==NULL){
+        head = newnode;
+        
+    }
+    else{ 
+        
+        struct node *t=head;
+        while(t->next!=NULL){
+            t=t->next;
+        }
+        t->next=newnode;
+    }
+   
+    return head;
+}
+
+
+
+// ---------------------------to check identicalor not--------------------------------------
+int identical(struct node *head, struct node *head1){
+    temp=head;
+    temp1=head1;
+    while(temp!=NULL && temp1!=NULL){
+        if(temp->data!=temp1->data){
+            return 1;
+        }
+        temp=temp->next;
+        temp1=temp1->next;
+    }
+    return 0;
+}
+
+
+
+//  -----------------------------------insertion at the end---------------------------------------
+struct node *insertAtFront(struct node *head,int data){
+    
+     newnode=createnode(data); 
+     newnode->next=head;
+     head=newnode;
+     return head;
+}
+
+
+
+// -----------------------------------insertion at the position -------------------------------
+struct node *insertAtPos(struct node *head,int data,int pos){
+    temp=head;
+    if(pos==1){
+        return insertAtFront(head,data);
+    }
+    else{
+        newnode=createnode(data);
+    for(int i=1;i<pos-2;i++){
+        temp=temp->next;
+    }
+    newnode->next=temp->next->next;
+    temp->next=newnode;
+    } 
+    return head;
+}
+
+
+
+// -----------------------------------insertion at key -------------------------------
+struct node *insertAtKey(struct node *head,int data,int pos){
+    temp=head;
+    prev=temp;
+    if(pos==head->data){
+        return insertAtFront(head,data);
+    }
+    else{
+        newnode=createnode(data);
+        while(temp!=NULL){
+            if(temp->data==pos){
+                prev->next=newnode;
+                newnode->next=temp;
+                break;
+            }
+            prev=temp;
+            temp=temp->next;
+        }
+    }
+    return head;
+}
+
+
+
+// ------------------------------deletion at position----------------------------
+struct node *deleteAtPos(struct node *head,int pos){
+    temp=head;
+    
+    if(pos==1){
+        head=head->next;
+    }
+    else {
+    for(int i=1;i<pos-1;i++){
+        temp=temp->next;
+    }
+    prev=temp;
+    temp=temp->next;
+    prev->next=temp->next;
+    }
+    return head;
+}
+
+
+
+// ------------------------------deletion by key------------------------
+struct node *deleteAtKey(struct node *head,int key){
+    temp=head;
+    prev=temp;
+    if(head->data==key){
+        head=head->next;
+    }
+    else{
+        while(temp!=NULL){
+            if(temp->data==key){ 
+                if(temp->next==NULL){
+                    prev->next=NULL;
+                    break;
+                }
+                else{ 
+                prev->next=temp->next;
+                break;
+                }
+            }
+            prev=temp;
+            temp=temp->next;
+        }
+    }
+    return head;
+}
+
+
+
+// --------------------------------size of head----------------------
+int findSize(struct node *head){
+    temp=head;
+    int i=0;
+    while(temp!=NULL){
+        temp=temp->next;
+        i++; 
+    }
+    return i;
+}
+
+
+
+// -------------------------- rotation----------------------------------
+struct node *counterRotate(struct node *head,int pos){
+    temp=head;
+    temp1=head;
+    prev=temp;
+    for(int i=0;i<pos-1;i++){
+        prev=temp;
+        temp=temp->next;
+    }
+    prev->next=NULL;
+    head=temp;
+    while(temp->next!=NULL){
+        temp=temp->next;
+    }
+    temp->next=temp1;
+    return head;
+}
+
+
+
+// ------------------------------swapping-----------------------------
+struct node *swapTwoNumber(struct node *head,int data,int pos){
+  int i=0;
+    int k=0;
+    temp=head;
+    while(temp!=NULL){
+        if(temp->data==data && k!=1){
+           temp->data=pos; 
+           k=1;
+        }
+        else if(temp->data==pos && i!=1){
+            temp->data=data;
+            i=1;
+        }
+        temp=temp->next;
+    }
+    return head;
+}
+
+
+
+// ------------------------------dispaly-----------------------------
+void display(struct node *head){
+    printf("\n");
+    temp=head;
+    while(temp!=NULL){
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+
+
+
+// ------------------------------dispaly nth node-----------------------------
+void display1(struct node *head, int n){
+    printf("\n");
+    int size=findSize(head);
+    if(size<n){
+        printf("\nnot available");
+    }
+    else{
+        temp=head;
+    int i=0;
+    while(temp!=NULL){
+        i++; 
+        if(i==n){
+            printf("%d",temp->data);
+            break;
+        }
+        temp=temp->next;
+     }
+    }
+}
+
+
+
+int main()
+{   
+    int s1,data,s2,pos,data2;
+    printf(" \n-------------------------insertion at end------------------------");
+    printf("\nsize");
+    scanf("%d",&s1); 
+    for(int i=0;i<s1;i++){ 
+        printf("\nenter data");
+        scanf("%d",&data);
+      head= insertAtEnd(head,data);
+    }
+    printf("\ncreated list");
+    display(head);
+    
+    
+    printf("\nsize");
+    scanf("%d",&s2);
+    for(int i=0;i<s2;i++){
+        scanf("%d",&data);
+      head1=insertAtEnd(head1,data);
+    }
+    printf("\ncreated list\n");
+    display(head1);  
+    
+    
+    printf("\n------------------checking identical----------------------------");
+    if(s1==s2){
+        int ch=identical(head,head1);
+        if(ch==0){
+          printf("\nNot identical"); 
+        }
+        else{
+            printf("\nidentical");
+        }
+    }
+    else{
+        printf("\nNot identical");
+    } 
+    
+    
+    printf("\n-------------------------insertion at beginning------------------------");
+    printf("\nenter data");
+    scanf("%d",&data);
+    head=insertAtFront(head,data); 
+    display(head);
+    
+    
+    printf(" \n------------------------insertion at ending------------------------");
+    printf("\nenter data");
+    scanf("%d",&data);
+    head=insertAtEnd(head,data);
+    display(head);
+    
+    
+    printf(" \n------------------------insertion at position------------------------");
+    printf("\nenter data");
+    scanf("%d",&data);
+    scanf("%d",&pos);
+    head=insertAtPos(head,data,pos);
+     printf("\ncreated list");
+    display(head);  
+    
+    
+    printf(" \n------------------------insertion at key------------------------");
+    printf("\nenter data");
+    scanf("%d",&data);
+    scanf("%d",&pos);
+    head=insertAtKey(head,data,pos);
+     printf("\ncreated list");
+    display(head);   
+    
+    
+     printf("\n----------------- deletion by position---------------------");
+     printf("\n enter position--");
+     scanf("%d",&pos);
+     head=deleteAtPos(head,pos);
+     display(head);
+     
+     
+      printf("\n----------------- deletion by key---------------------");
+      printf("\n enter element--");
+      scanf("%d",&pos);
+      head=deleteAtKey(head,pos);
+      display(head);
+       
+       
+      printf("\n----------------- nth node------------------");
+      printf("\nenter nth node:");
+      scanf("%d",&data);
+      display1(head,data); 
+    
+    
+    printf("\n----------------right rotation or counter rotation---------------");
+    printf("\nenter data");
+    scanf("%d",&data);
+    head=counterRotate(head,data);
+    display(head);
+    
+    
+    printf("\n-----------------------swap two numbers---------------------");
+    printf("\n enter data1");
+    scanf("%d",&data);
+    printf("\n enter data1");
+    scanf("%d",&pos);
+    head=swapTwoNumber(head,data,pos);
+    display(head);
+    return 0;
+}
+
+
+
+
+
